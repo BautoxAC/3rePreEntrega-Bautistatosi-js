@@ -1,4 +1,49 @@
+/*reset*/
+* {
+    margin: 0rem;
+    padding: 0rem;
+    box-sizing: border-box;
+}
+
 #mainpro{
     display: flex;
     flex-wrap: wrap;
+}
+a{
+    color: white;
+    text-decoration: none;
+}
+a:hover{
+    color: white;
+}
+.volver{
+    color: black;
+}
+.mainpro__hijo{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem;
+}
+/* estilos de las categorias */
+.categorias{
+    list-style: none;
+    display: inline;
+}
+.categorias__mostrar{
+    display: inline-block;
+    margin: 4rem;
+}
+.categorias__mostrar__hijo{
+    display: none;
+    list-style: none;
+    padding-left: 0rem;
+    padding: 1rem;
+    position: absolute;
+    background-color: aqua;
+    border: 1px solid black ;
+    border-radius: 3px;
+}
+.categorias__mostrar:hover > ul{
+    display: block;
 }
