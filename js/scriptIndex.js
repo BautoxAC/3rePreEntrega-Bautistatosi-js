@@ -15,7 +15,7 @@ let productos = [
 
 let contenedorProductos = document.getElementById("mainpro")
 renderizarProductos(productos)
-//renderizar el html del array selleccionada
+//renderizar el html del array seleccionado
 function renderizarProductos(arrayDeProductos) {
     contenedorProductos.innerHTML = ""
     for (const producto of arrayDeProductos) {
@@ -34,7 +34,7 @@ buscador.addEventListener("change", renderizarProductosFiltrados)
 function renderizarProductosFiltrados() {
     renderizarProductos(productos.filter(producto => producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())))
 }
-//le pone el evento click a los botones
+//le pone el evento click a los botones de agregar carrito
 for (let i = 0; i < productos.length; i++) {
     let verProductoBoton = document.getElementById("producto" + i + "__boton")
     verProductoBoton.addEventListener("click", verProducto)
@@ -43,16 +43,39 @@ for (let i = 0; i < productos.length; i++) {
         sessionStorage.setItem("compra", JSON.stringify(producto))
     }
 }
-
-//filtrar por categorias
-for (let i = 1; i <= 6; i++) {
-    let mostrarPorCate=document.getElementById("categoria"+i)
-    mostrarPorCate.addEventListener("click",renderizarCate)
+let proFiltradoCate = []
+let clickeados = 0
+//filtrador por categorias
+for (let i = 1; i < 6; i++) {
+    //agarra la checkbox
+    let checkMostrarPorCate = document.getElementById("categoria" + i + "__Checkbox")
+    let cate = document.getElementById("categoria" + i)
+    checkMostrarPorCate.addEventListener("change", renderizarCate)
     function renderizarCate() {
-        if (i<6) {
-            renderizarProductos(productos.filter(producto =>producto.categoria===mostrarPorCate.innerText.toLowerCase()))
+        //revisa el click en el checkbox
+        if (checkMostrarPorCate.checked) {
+            clickeados++
+            renderizarFiltrados(true)
+            console.log(productos)
         } else {
-            renderizarProductos(productos)
+            clickeados--
+            //revisa si hay algun checkbox clickeado ya que si no hay ninguno renderiza todo
+            if (clickeados < 1) {
+                for (const producto of productos) {
+                    producto.agregar=false
+                }
+                renderizarProductos(productos)
+            } else {
+                renderizarFiltrados(false)
+            }
+            console.log(productos)
+        }
+        function renderizarFiltrados(agregarSiNo) {
+            proFiltradoCate = productos.filter(producto => producto.categoria === cate.innerText.toLowerCase())
+            for (const filtrado of proFiltradoCate) {
+                filtrado.agregar = agregarSiNo
+            }
+            renderizarProductos(productos.filter(producto => producto.agregar === true))
         }
     }
 }
