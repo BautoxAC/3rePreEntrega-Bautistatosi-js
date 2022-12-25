@@ -12,28 +12,8 @@ let productos = [
     { nombre: "LightB", id: 9, categoria: "vestidos", stock: 6, precio: 50, imgUrl: "./img/productos/LightB.png" },
     { nombre: "LightE2", id: 10, categoria: "remeras", stock: 7, precio: 20, imgUrl: "./img/productos/LightE2.png" }
 ]
-
 let contenedorProductos = document.getElementById("mainpro")
 renderizarProductos(productos)
-//renderizar el html del array seleccionado
-function renderizarProductos(arrayDeProductos) {
-    contenedorProductos.innerHTML = ""
-    for (const producto of arrayDeProductos) {
-        contenedorProductos.innerHTML += `
-        <div class="mainpro__hijo" id="producto${producto.id}">
-            <img src="${producto.imgUrl}" alt="medias de color azul" style="height:200px;width:200px">
-            <h2>${producto.nombre}</h2>
-            <p>${producto.precio}$</p>
-            <button type="button" class="btn btn-primary" id="producto${producto.id}__boton"><a href="./pages/vistaProduc.html">Ver producto</a></button>
-        </div>`
-    }
-}
-//Buscador por categoria y nombre del producto
-let buscador = document.getElementById("search")
-buscador.addEventListener("change", renderizarProductosFiltrados)
-function renderizarProductosFiltrados() {
-    renderizarProductos(productos.filter(producto => producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())))
-}
 //le pone el evento click a los botones de agregar carrito
 for (let i = 0; i < productos.length; i++) {
     let verProductoBoton = document.getElementById("producto" + i + "__boton")
@@ -41,6 +21,34 @@ for (let i = 0; i < productos.length; i++) {
     const producto = productos[i]
     function verProducto() {
         sessionStorage.setItem("compra", JSON.stringify(producto))
+    }
+}
+//renderizar el html del array seleccionado
+function renderizarProductos(arrayDeProductos) {
+    contenedorProductos.innerHTML = ""
+    //el if revisa si el array esta vacio para que cuando se use el buscador y no se encuentre lo que busco aparezca "No se encontro la busqueda"
+    if (arrayDeProductos.length !== 0) {
+        for (const producto of arrayDeProductos) {
+            contenedorProductos.innerHTML += `
+        <div class="mainpro__hijo" id="producto${producto.id}">
+            <img src="${producto.imgUrl}" alt="medias de color azul" style="height:200px;width:200px">
+            <h2>${producto.nombre}</h2>
+            <p>${producto.precio}$</p>
+            <button type="button" class="btn btn-primary" id="producto${producto.id}__boton"><a href="./pages/vistaProduc.html">Ver producto</a></button>
+        </div>`
+        }
+    } else {
+        contenedorProductos.innerHTML += `<h2 class="noSeEncontro">No se encontro la busqueda</h2>`
+    }
+}
+//Buscador por categoria y nombre del producto
+let buscador = document.getElementById("search")
+buscador.addEventListener("change", renderizarProductosBuscados)
+function renderizarProductosBuscados() {
+    if (productos.find(producto=>producto.agregar===true)) {
+        renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar===true))
+    } else {
+        renderizarProductos(productos.filter(producto => producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())))
     }
 }
 let proFiltradoCate = []
@@ -56,26 +64,24 @@ for (let i = 1; i < 6; i++) {
         if (checkMostrarPorCate.checked) {
             clickeados++
             renderizarFiltrados(true)
-            console.log(productos)
         } else {
             clickeados--
             //revisa si hay algun checkbox clickeado ya que si no hay ninguno renderiza todo
             if (clickeados < 1) {
                 for (const producto of productos) {
-                    producto.agregar=false
+                    producto.agregar = false
                 }
-                renderizarProductos(productos)
+                renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar===false))
             } else {
                 renderizarFiltrados(false)
             }
-            console.log(productos)
         }
         function renderizarFiltrados(agregarSiNo) {
             proFiltradoCate = productos.filter(producto => producto.categoria === cate.innerText.toLowerCase())
             for (const filtrado of proFiltradoCate) {
                 filtrado.agregar = agregarSiNo
             }
-            renderizarProductos(productos.filter(producto => producto.agregar === true))
+            renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar===true))
         }
     }
 }
