@@ -19,8 +19,59 @@ for (let i = 0; i < productos.length; i++) {
     let verProductoBoton = document.getElementById("producto" + i + "__boton")
     verProductoBoton.addEventListener("click", verProducto)
     const producto = productos[i]
+    //script para visualizar productos a comprar
     function verProducto() {
-        sessionStorage.setItem("compra", JSON.stringify(producto))
+        if (producto.stock !== 0) {
+            let compra = producto
+            contenedorProductos.innerHTML =
+            `<div class="comprarProductoHijo" id="producto${compra.id}">
+                <img src="${"./." + compra.imgUrl}" alt="medias de color azul" style="height:200px;width:200px">
+                <h2>${compra.nombre}</h2>
+                <p>${compra.precio}$</p>
+                <button type="button" class="btn btn-primary" id="resta">-</button>
+                <input type="number" value="0" id="stock" min="0" max="${compra.stock}">
+                <button type="button" class="btn btn-primary" id="suma">+</button>
+                <br>
+                <button type="submit" class="btn btn-primary" id="carrito">Añadir al carrito</button>
+            </div>`
+            let botonCarrito = document.getElementById("carrito")
+            botonCarrito.addEventListener("click", agregarAlCarrito)
+            let carrito = []
+            document.getElementById("suma").addEventListener("click", suma1)
+            document.getElementById("resta").addEventListener("click", resta1)
+            let stock = document.getElementById("stock")
+            function suma1() {
+                if (compra.stock > stock.value && stock.value >= 0) {
+                    stock.value++
+                }
+            }
+            function resta1() {
+                if (compra.stock >= stock.value && stock.value > 1) {
+                    stock.value--
+                }
+            }
+            function agregarAlCarrito() {
+                if (compra.stock >= stock.value && stock.value >= 1) {
+                    compra.stock -= stock.value
+                    stock.value=0
+                    stock.max=compra.stock
+                    carrito.push({ ...compra, comprar: Number(stock.value) })
+                    localStorage.setItem("carrito", JSON.stringify(carrito))
+                    if (compra.stock===0) {
+                        productos.splice(productos.indexOf(compra),1)
+                        console.log(productos)
+                    }
+                    alert("Compra añadida exitosamente al carrito")
+                } else {
+                    if (compra.stock===0) {
+                        alert("SIN STOCK")
+                        renderizarProductos(productos)
+                    } else {
+                        alert("El valor debe ser entre 1 y " + compra.stock)
+                    }
+                }
+            }
+        }
     }
 }
 //renderizar el html del array seleccionado
@@ -34,7 +85,7 @@ function renderizarProductos(arrayDeProductos) {
             <img src="${producto.imgUrl}" alt="medias de color azul" style="height:200px;width:200px">
             <h2>${producto.nombre}</h2>
             <p>${producto.precio}$</p>
-            <button type="button" class="btn btn-primary" id="producto${producto.id}__boton"><a href="./pages/vistaProduc.html">Ver producto</a></button>
+            <button type="button" class="btn btn-primary" id="producto${producto.id}__boton">Ver producto</button>
         </div>`
         }
     } else {
@@ -45,10 +96,10 @@ function renderizarProductos(arrayDeProductos) {
 let buscador = document.getElementById("search")
 buscador.addEventListener("change", renderizarProductosBuscados)
 function renderizarProductosBuscados() {
-    if (productos.find(producto=>producto.agregar===true)) {
-        renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar===true))
+    if (productos.find(producto => producto.agregar === true)) {
+        renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar === true && producto.stock>0))
     } else {
-        renderizarProductos(productos.filter(producto => producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())))
+        renderizarProductos(productos.filter(producto => producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase()) && producto.stock>0))
     }
 }
 let proFiltradoCate = []
@@ -71,7 +122,7 @@ for (let i = 1; i < 6; i++) {
                 for (const producto of productos) {
                     producto.agregar = false
                 }
-                renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar===false))
+                renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar === false && producto.stock>0))
             } else {
                 renderizarFiltrados(false)
             }
@@ -81,7 +132,7 @@ for (let i = 1; i < 6; i++) {
             for (const filtrado of proFiltradoCate) {
                 filtrado.agregar = agregarSiNo
             }
-            renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar===true))
+            renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar === true && producto.stock>0))
         }
     }
 }
