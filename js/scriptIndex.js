@@ -12,7 +12,6 @@ let productos = [
     { nombre: "LightB", id: 9, categoria: "vestidos", stock: 6, precio: 50, imgUrl: "./img/productos/LightB.png" },
     { nombre: "LightE2", id: 10, categoria: "remeras", stock: 7, precio: 20, imgUrl: "./img/productos/LightE2.png" }
 ]
-
 document.getElementById("reinicio").addEventListener("click", reinicio)
 function reinicio() {
     productos = [
@@ -59,19 +58,21 @@ function renderizarProductos(arrayDeProductos) {
     //le pone el evento click a los botones de agregar carrito
     for (let i = 0; i < arrayDeProductos.length; i++) {
         const producto = productos[i]
+        producto.disponible = producto.stock
         let verProductoBoton = document.getElementById("producto__N:" + i + "__boton")
         verProductoBoton.addEventListener("click", verProducto)
         //script para visualizar productos a comprar
         function verProducto() {
-            if (producto.stock !== 0) {
+            if (producto.disponible !== 0) {
                 let compra = producto
                 contenedorProductos.innerHTML =
                     `<div class="comprarProductoHijo" id="producto${compra.id}">
                 <img src="${"./." + compra.imgUrl}" alt="medias de color azul" style="height:200px;width:200px">
                 <h2>${compra.nombre}</h2>
                 <p>${compra.precio}$</p>
+                <p>disponibles:${compra.disponible}</p>
                 <button type="button" class="btn btn-primary" id="resta">-</button>
-                <input type="number" value="0" id="stock" min="0" max="${compra.stock}">
+                <input type="number" value="0" id="stock" min="0" max="${compra.disponible}">
                 <button type="button" class="btn btn-primary" id="suma">+</button>
                 <br>
                 <button type="submit" class="btn btn-primary" id="carrito">Añadir al carrito</button>
@@ -83,31 +84,38 @@ function renderizarProductos(arrayDeProductos) {
                 document.getElementById("resta").addEventListener("click", resta1)
                 let stock = document.getElementById("stock")
                 function suma1() {
-                    if (compra.stock > stock.value && stock.value >= 0) {
+                    if (compra.disponible > stock.value && stock.value >= 0) {
                         stock.value++
                     }
                 }
                 function resta1() {
-                    if (compra.stock >= stock.value && stock.value > 1) {
+                    if (compra.disponible >= stock.value && stock.value > 1) {
                         stock.value--
                     }
                 }
                 function agregarAlCarrito() {
-                    if (compra.stock >= stock.value && stock.value >= 1) {
-                        compra.stock -= stock.value
-                        stock.value = 0
-                        stock.max = compra.stock
-                        carrito.push({ ...compra, comprar: Number(stock.value) })
+                    if (compra.disponible >= stock.value && stock.value >= 1) {
+                        compra.disponible -= stock.value
+                        if (carrito.find(producto => producto.id === compra.id)) {
+                            let repetido=carrito[carrito.indexOf(carrito.find(producto => producto.id === compra.id))]
+                            repetido.disponible = compra.disponible
+                            repetido.comprar+=Number(stock.value)
+                        } else {
+                            carrito.push({ ...compra, comprar: Number(stock.value) })
+                        }
                         localStorage.setItem("carrito", JSON.stringify(carrito))
                         alert("Compra añadida exitosamente al carrito")
-                        if (compra.stock === 0) {
+                        if (compra.disponible === 0) {
                             productos.splice(productos.indexOf(compra), 1)
                             localStorage.setItem("productos", JSON.stringify(productos))
                             alert("SIN STOCK")
                             renderizarProductos(productos)
                         }
+                        console.log(carrito)
+                        console.log(productos)
+                        stock.value = 0
                     } else {
-                        alert("El valor debe ser entre 1 y " + compra.stock)
+                        alert("El valor debe ser entre 1 y " + disponible || compra.stock)
                     }
                 }
             }
