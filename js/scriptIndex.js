@@ -1,4 +1,5 @@
 //Array
+//ordenar por categoriay alfabeticamente dentro de esa categoria
 let productos = [
     { nombre: "JeansB", id: 0, categoria: "pantalones", stock: 4, precio: 20, imgUrl: "./img/productos/JeansB.png" },
     { nombre: "MediasC", id: 1, categoria: "medias", stock: 10, precio: 30, imgUrl: "./img/productos/MediasC.png" },
@@ -13,6 +14,8 @@ let productos = [
     { nombre: "LightE2", id: 10, categoria: "remeras", stock: 7, precio: 20, imgUrl: "./img/productos/LightE2.png" }
 ]
 document.getElementById("reinicio").addEventListener("click", reinicio)
+document.getElementById("volver").addEventListener("click", volver)
+let carrito = []
 function reinicio() {
     productos = [
         { nombre: "JeansB", id: 0, categoria: "pantalones", stock: 4, precio: 20, imgUrl: "./img/productos/JeansB.png" },
@@ -31,7 +34,14 @@ function reinicio() {
     localStorage.clear()
     renderizarProductos(productos)
 }
+function volver() {
+    renderizarProductos(productos) 
+    console.log(carrito)
+}
 let contenedorProductos = document.getElementById("mainpro")
+if (localStorage.getItem("carrito")) {
+    carrito = JSON.parse(localStorage.getItem("carrito"))
+}
 if (localStorage.getItem("productos")) {
     productos = JSON.parse(localStorage.getItem("productos"))
 }
@@ -79,7 +89,6 @@ function renderizarProductos(arrayDeProductos) {
             </div>`
                 let botonCarrito = document.getElementById("carrito")
                 botonCarrito.addEventListener("click", agregarAlCarrito)
-                let carrito = []
                 document.getElementById("suma").addEventListener("click", suma1)
                 document.getElementById("resta").addEventListener("click", resta1)
                 let stock = document.getElementById("stock")
@@ -115,7 +124,7 @@ function renderizarProductos(arrayDeProductos) {
                         console.log(productos)
                         stock.value = 0
                     } else {
-                        alert("El valor debe ser entre 1 y " + disponible || compra.stock)
+                        alert("El valor debe ser entre 1 y " + compra.disponible || compra.stock)
                     }
                 }
             }
