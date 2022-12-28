@@ -67,7 +67,7 @@ function renderizarProductos(arrayDeProductos) {
                 let compra = producto
                 contenedorProductos.innerHTML =
                     `<div class="comprarProductoHijo" id="producto${compra.id}">
-                <img src="${"./." + compra.imgUrl}" alt="medias de color azul" style="height:200px;width:200px">
+                <img src="${compra.imgUrl}" alt="medias de color azul" style="height:200px;width:200px">
                 <h2>${compra.nombre}</h2>
                 <p>${compra.precio}$</p>
                 <p>disponibles:${compra.disponible}</p>
