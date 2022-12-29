@@ -33,9 +33,10 @@ function reinicio() {
     carrito = []
     localStorage.clear()
     renderizarProductos(productos)
+    location.reload()
 }
 function volver() {
-    renderizarProductos(productos) 
+    renderizarProductos(productos)
     console.log(carrito)
 }
 let contenedorProductos = document.getElementById("mainpro")
@@ -44,6 +45,8 @@ if (localStorage.getItem("carrito")) {
 }
 if (localStorage.getItem("productos")) {
     productos = JSON.parse(localStorage.getItem("productos"))
+} else {
+    localStorage.setItem("productos", JSON.stringify(productos))
 }
 renderizarProductos(productos)
 
@@ -68,66 +71,75 @@ function renderizarProductos(arrayDeProductos) {
     //le pone el evento click a los botones de agregar carrito
     for (let i = 0; i < arrayDeProductos.length; i++) {
         const producto = productos[i]
-        producto.disponible = producto.stock
+        if (typeof (producto.disponible) === "undefined") {
+            producto.disponible = producto.stock
+        }
         let verProductoBoton = document.getElementById("producto__N:" + i + "__boton")
-        verProductoBoton.addEventListener("click", verProducto)
+        if (producto.stock === 0) {
+            verProductoBoton.innerText = "Sin Stock"
+        } else {
+            verProductoBoton.addEventListener("click", verProducto)
+        }
         //script para visualizar productos a comprar
         function verProducto() {
-            if (producto.disponible !== 0) {
-                let compra = producto
-                contenedorProductos.innerHTML =
-                    `<div class="comprarProductoHijo" id="producto${compra.id}">
+            let compra = producto
+            contenedorProductos.innerHTML =
+                `<div class="comprarProductoHijo" id="producto${compra.id}">
                 <img src="${compra.imgUrl}" alt="medias de color azul" style="height:200px;width:200px">
                 <h2>${compra.nombre}</h2>
                 <p>${compra.precio}$</p>
-                <p>disponibles:${compra.disponible}</p>
+                <p id="disponibleTexto">disponibles: ${compra.disponible}</p>
                 <button type="button" class="btn btn-primary" id="resta">-</button>
                 <input type="number" value="0" id="stock" min="0" max="${compra.disponible}">
                 <button type="button" class="btn btn-primary" id="suma">+</button>
                 <br>
                 <button type="submit" class="btn btn-primary" id="carrito">Añadir al carrito</button>
-            </div>`
-                let botonCarrito = document.getElementById("carrito")
-                botonCarrito.addEventListener("click", agregarAlCarrito)
-                document.getElementById("suma").addEventListener("click", suma1)
-                document.getElementById("resta").addEventListener("click", resta1)
-                let stock = document.getElementById("stock")
-                function suma1() {
-                    if (compra.disponible > stock.value && stock.value >= 0) {
-                        stock.value++
-                    }
+                </div>`
+            let botonCarrito = document.getElementById("carrito")
+            let disponibleTexto = document.getElementById("disponibleTexto")
+            botonCarrito.addEventListener("click", agregarAlCarrito)
+            document.getElementById("suma").addEventListener("click", suma1)
+            document.getElementById("resta").addEventListener("click", resta1)
+            let stock = document.getElementById("stock")
+            function suma1() {
+                if (compra.disponible > stock.value && stock.value >= 0) {
+                    stock.value++
                 }
-                function resta1() {
-                    if (compra.disponible >= stock.value && stock.value > 1) {
-                        stock.value--
-                    }
+            }
+            function resta1() {
+                if (compra.disponible >= stock.value && stock.value > 1) {
+                    stock.value--
                 }
-                function agregarAlCarrito() {
+            }
+            function agregarAlCarrito() {
+                if (compra.disponible === 0) {
+                    alert("No puedes agregar más items de este producto\nEstan todos los disponibles en el carrito")
+                }else{
                     if (compra.disponible >= stock.value && stock.value >= 1) {
                         compra.disponible -= stock.value
                         if (carrito.find(producto => producto.id === compra.id)) {
-                            let repetido=carrito[carrito.indexOf(carrito.find(producto => producto.id === compra.id))]
+                            let repetido = carrito[carrito.indexOf(carrito.find(producto => producto.id === compra.id))]
                             repetido.disponible = compra.disponible
-                            repetido.comprar+=Number(stock.value)
+                            repetido.comprar += Number(stock.value)
                         } else {
                             carrito.push({ ...compra, comprar: Number(stock.value) })
                         }
                         localStorage.setItem("carrito", JSON.stringify(carrito))
                         alert("Compra añadida exitosamente al carrito")
                         if (compra.disponible === 0) {
-                            productos.splice(productos.indexOf(compra), 1)
-                            localStorage.setItem("productos", JSON.stringify(productos))
-                            alert("SIN STOCK")
+                            compra.sinStock = true
+                            alert("SIN STOCK DISPONIBLE DEL PRODUCTO")
                             renderizarProductos(productos)
                         }
-                        console.log(carrito)
-                        console.log(productos)
+                        disponibleTexto.innerText = "disponibles: " + compra.disponible
+                        localStorage.setItem("productos", JSON.stringify(productos))
                         stock.value = 0
                     } else {
                         alert("El valor debe ser entre 1 y " + compra.disponible || compra.stock)
                     }
                 }
             }
+
         }
     }
 }
@@ -136,9 +148,9 @@ let buscador = document.getElementById("search")
 buscador.addEventListener("change", renderizarProductosBuscados)
 function renderizarProductosBuscados() {
     if (productos.find(producto => producto.agregar === true)) {
-        renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar === true && producto.stock > 0))
+        renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar === true))
     } else {
-        renderizarProductos(productos.filter(producto => producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase()) && producto.stock > 0))
+        renderizarProductos(productos.filter(producto => producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())))
     }
 }
 let proFiltradoCate = []
@@ -161,7 +173,7 @@ for (let i = 1; i < 6; i++) {
                 for (const producto of productos) {
                     producto.agregar = false
                 }
-                renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar === false && producto.stock > 0))
+                renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar === false))
             } else {
                 renderizarFiltrados(false)
             }
@@ -171,7 +183,7 @@ for (let i = 1; i < 6; i++) {
             for (const filtrado of proFiltradoCate) {
                 filtrado.agregar = agregarSiNo
             }
-            renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar === true && producto.stock > 0))
+            renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar === true))
         }
     }
 }

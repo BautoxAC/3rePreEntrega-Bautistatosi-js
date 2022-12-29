@@ -47,3 +47,14 @@ a:hover{
 .categorias__mostrar:hover > ul{
     display: block;
 }
+/* estilos carrito */
+.finalizarSi{
+    display: inline;
+}
+.noMostrar{
+    display: none;
+}
+.cruz{
+    width: 2rem;
+    height: 2rem;
+}
