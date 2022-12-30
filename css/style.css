@@ -4,7 +4,9 @@
     padding: 0rem;
     box-sizing: border-box;
 }
-
+.body{
+    width: 100%;
+}
 /* estilos del index */
 #reinicio{
     position: absolute;
@@ -112,22 +114,23 @@ a:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 1rem;
+    margin: 1%;
     border: 0.3rem solid rgb(32, 97, 138);
     border-radius: 0.5rem;
     padding: 2rem;
+    width: 18%;
 }
 
 #mainpro {
     display: flex;
     justify-content: left;
+    width: 100%;
 }
 
 .mainpro__hijo__img {
-    width: 8rem;
+    width:8rem;
     height: 8rem;
 }
-
 
 /* estilos ver producto */
 .comprarProductoHijo__img{
