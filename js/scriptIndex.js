@@ -13,9 +13,11 @@ let productos = [
     { nombre: "LightB", id: 9, categoria: "vestidos", stock: 6, precio: 50, imgUrl: "./img/productos/LightB.png" },
     { nombre: "LightE2", id: 10, categoria: "remeras", stock: 7, precio: 20, imgUrl: "./img/productos/LightE2.png" }
 ]
-document.getElementById("reinicio").addEventListener("click", reinicio)
-document.getElementById("volver").addEventListener("click", volver)
+let reini = document.getElementById("reinicio")
+reini.addEventListener("click", reinicio)
 let carrito = []
+let utiliadesIndex = document.getElementById("utilidades")
+let tituloIndex = document.getElementById("h1")
 function reinicio() {
     productos = [
         { nombre: "JeansB", id: 0, categoria: "pantalones", stock: 4, precio: 20, imgUrl: "./img/productos/JeansB.png" },
@@ -34,9 +36,6 @@ function reinicio() {
     localStorage.clear()
     renderizarProductos(productos)
     location.reload()
-}
-function volver() {
-    renderizarProductos(productos)
 }
 let contenedorProductos = document.getElementById("mainpro")
 if (localStorage.getItem("carrito")) {
@@ -59,13 +58,13 @@ function renderizarProductos(arrayDeProductos) {
             contenedorProductos.innerHTML += `
         <div class="mainpro__hijo" id="producto__id:${producto.id}">
             <img src="${producto.imgUrl}" alt="medias de color azul" class="mainpro__hijo__img">
-            <h2>${producto.nombre}</h2>
+            <h3>${producto.nombre}</h3>
             <p>${producto.precio}$</p>
             <button type="button" class="btn btn-primary" id="producto__N:${i}__boton">Ver producto</button>
         </div>`
         }
     } else {
-        contenedorProductos.innerHTML += `<h2 class="noSeEncontro">No se encontro la busqueda</h2>`
+        contenedorProductos.innerHTML += `<h3 class="noSeEncontro">No se encontro la busqueda</h3>`
     }
     //le pone el evento click a los botones de agregar carrito
     for (let i = 0; i < arrayDeProductos.length; i++) {
@@ -81,18 +80,31 @@ function renderizarProductos(arrayDeProductos) {
         }
         //script para visualizar productos a comprar
         function verProducto() {
+            utiliadesIndex.id = "noMostrar"
+            tituloIndex.id = "noMostrar"
+            reini.id="noMostrar"
             let compra = producto
             contenedorProductos.innerHTML =
                 `<div class="comprarProductoHijo" id="producto${compra.id}">
                 <img src="${compra.imgUrl}" alt="medias de color azul" class="comprarProductoHijo__img">
+                <section class="comprarProductoHijo__section">
                 <h2>${compra.nombre}</h2>
-                <p>${compra.precio}$</p>
-                <p id="disponibleTexto">disponibles: ${compra.disponible}</p>
+                <p>Precio: ${compra.precio}$</p>
+                <p id="disponibleTexto">Disponibles: ${compra.disponible} unidades</p>
                 <button type="button" class="btn btn-primary" id="resta">-</button>
                 <input type="number" value="0" id="stock" min="0" max="${compra.disponible}">
                 <button type="button" class="btn btn-primary" id="suma">+</button>
                 <button type="submit" class="btn btn-primary" id="carrito">Añadir al carrito</button>
+                <button type="button" class="btn btn-primary" id="volver">Volver</button>
+                </section>
                 </div>`
+            document.getElementById("volver").addEventListener("click", volver)
+            function volver() {
+                renderizarProductos(productos)
+                utiliadesIndex.id = "utilidades"
+                tituloIndex.id = "h1"
+                reini.id="reinicio"
+            }
             let botonCarrito = document.getElementById("carrito")
             let disponibleTexto = document.getElementById("disponibleTexto")
             botonCarrito.addEventListener("click", agregarAlCarrito)
@@ -112,7 +124,7 @@ function renderizarProductos(arrayDeProductos) {
             function agregarAlCarrito() {
                 if (compra.disponible === 0) {
                     alert("No puedes agregar más items de este producto\nEstan todos los disponibles en el carrito")
-                }else{
+                } else {
                     if (compra.disponible >= stock.value && stock.value >= 1) {
                         compra.disponible -= stock.value
                         if (carrito.find(producto => producto.id === compra.id)) {
@@ -127,6 +139,9 @@ function renderizarProductos(arrayDeProductos) {
                         if (compra.disponible === 0) {
                             compra.sinStock = true
                             alert("SIN STOCK DISPONIBLE DEL PRODUCTO")
+                            utiliadesIndex.id = "utilidades"
+                            tituloIndex.id = "h1"
+                            reini.id="reinicio"
                             renderizarProductos(productos)
                         }
                         disponibleTexto.innerText = "disponibles: " + compra.disponible

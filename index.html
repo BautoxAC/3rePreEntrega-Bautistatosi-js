@@ -22,32 +22,38 @@
 <body>
     <div class="body">
         <header>
-            <h1>Nuestros productos</h1>
-            <div class="utilidades">
+            <h1 id="h1">Nuestros productos</h1>
+            <button type="button" class="btn btn-primary" id="reinicio" title="Reinicia la pagina a los valores iniciales">Reiniciar pagina</button>
+            <div id="utilidades">
                 <section class="buscador">
                     <label for="search" class="form-label" id="searchText">Buscador</label>
                     <input type="text" class="form-control" id="search" placeholder="Escribe el producto que deseas">
                 </section>
                 <ul class="categorias">
                     <li class="categorias__mostrar">
-                        <span>Categorias</span>
+                        <h2 id="categorias__mostrar__titulo">Ver Categorias</h2>
                         <ul class="categorias__mostrar__hijo">
-                            <li id="categoria1"><input type="checkbox" id="categoria1__Checkbox">Pantalones</li>
-                            <li id="categoria2"><input type="checkbox" id="categoria2__Checkbox">Remeras</li>
-                            <li id="categoria3"><input type="checkbox" id="categoria3__Checkbox">Accesorios</li>
-                            <li id="categoria4"><input type="checkbox" id="categoria4__Checkbox">Vestidos</li>
-                            <li id="categoria5"><input type="checkbox" id="categoria5__Checkbox">Medias</li>
+                            <li id="categoria1" class="categorias__mostrar__hijo__li"><input type="checkbox"
+                                    id="categoria1__Checkbox" class="categorias__mostrar__hijo__check">Pantalones</li>
+                            <li id="categoria2" class="categorias__mostrar__hijo__li"><input type="checkbox"
+                                    id="categoria2__Checkbox" class="categorias__mostrar__hijo__check">Remeras</li>
+                            <li id="categoria3" class="categorias__mostrar__hijo__li"><input type="checkbox"
+                                    id="categoria3__Checkbox" class="categorias__mostrar__hijo__check">Accesorios</li>
+                            <li id="categoria4" class="categorias__mostrar__hijo__li"><input type="checkbox"
+                                    id="categoria4__Checkbox" class="categorias__mostrar__hijo__check">Vestidos</li>
+                            <li id="categoria5" class="categorias__mostrar__hijo__li"><input type="checkbox"
+                                    id="categoria5__Checkbox" class="categorias__mostrar__hijo__check">Medias</li>
                         </ul>
                     </li>
                 </ul>
-                <a href="./pages/carrito.html" class="carrito"><img src="./img/carrito.png"
-                        alt="Boton para mostrar carrito" class="carrito__img" title="Mostrar carrito"></a>
+                <section class="carrito">
+                    <a href="./pages/carrito.html" class="carrito__a"><img src="./img/carrito.png"
+                            alt="Boton para mostrar carrito" class="carrito__img" title="Mostrar carrito"></a>
+                </section>
             </div>
         </header>
         <main id="mainpro">
         </main>
-        <button id="volver">Volver</button>
-        <button id="reinicio">Reiniciar pagina</button>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
