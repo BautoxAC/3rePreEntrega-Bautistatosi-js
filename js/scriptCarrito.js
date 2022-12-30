@@ -1,4 +1,4 @@
-let contenedorCarrito = document.getElementById("mainCarrito")
+let contenedorCarrito = document.getElementById("mainCarrito__contenedorCarrito")
 let carrito = []
 let total = []
 let productos = JSON.parse(localStorage.getItem("productos"))
@@ -17,7 +17,7 @@ if (localStorage.getItem("carrito")) {
             contenedorCarrito.innerHTML += `
             <div id="elementoCarrrito${producto.id}">
             <img src="${"./." + producto.imgUrl}" alt="medias de color azul" style="height:200px;width:200px">
-                    <h1>${producto.nombre}</h1>
+                    <h12>${producto.nombre}</h2>
                     <p id="precioN${producto.id}">${producto.precio * producto.comprar}$</p>
                     <p>disponibles: ${producto.stock}</p>
                     <p id="precioUniN${producto.id}">Precio Unitatio: ${producto.precio}$</p>
@@ -66,15 +66,16 @@ if (localStorage.getItem("carrito")) {
             }
             document.getElementById("cruzN" + producto.id).addEventListener("click", eliminiarProducto)
             function eliminiarProducto() {
-                let elementoEliminado=productos.find(producto1 => producto1.id === producto.id)
-                elementoEliminado.disponible=elementoEliminado.stock
+                let elementoEliminado = productos.find(producto1 => producto1.id === producto.id)
+                elementoEliminado.disponible = elementoEliminado.stock
                 localStorage.setItem("productos", JSON.stringify(productos))
                 carrito.splice(carrito.indexOf(elementoEliminado), 1)
                 localStorage.setItem("carrito", JSON.stringify(carrito))
                 if (carrito.length === 0) {
-                    contenedorCarrito.innerHTML = `<h1>No hay productos en el carrito</h1>`
+                    contenedorCarrito.innerHTML = `<h2>No hay productos en el carrito</h2>`
                     botonFinalizar.className = "noMostrar"
                     elementoTotal.innerText = ""
+                    localStorage.removeItem("carrito")
                 } else {
                     renderizarCarrito()
                 }
@@ -120,6 +121,7 @@ if (localStorage.getItem("carrito")) {
     }
     renderizarCarrito()
 } else {
-    contenedorCarrito.innerHTML = `<h1>No hay productos en el carrito</h1>`
+    contenedorCarrito.innerHTML = `<h2>No hay productos en el carrito</h2>`
+    elementoTotal.innerText = ""
     botonFinalizar.className = "noMostrar"
 }

@@ -5,56 +5,123 @@
     box-sizing: border-box;
 }
 
-#mainpro{
+/* estilos del index */
+h1 {
+    margin-top: 2rem;
+    font-size: 3rem;
+    text-decoration: underline rgb(49, 159, 231);
+    font-family: Tiemann, serif;
+    text-align: center;
+}
+
+#searchText {
+    margin-top: 0.25rem;
+    font-size: 2rem;
+    text-decoration: underline rgb(49, 159, 231);
+    font-family: Tiemann, serif;
+    display: block;
+}
+
+#search {
+    display: inline;
+    width: 20rem;
+}
+
+#mainpro {
     display: flex;
     flex-wrap: wrap;
 }
-a{
+
+a {
     color: white;
     text-decoration: none;
 }
-a:hover{
+
+a:hover {
     color: white;
 }
-.volver{
+
+.volver {
     color: black;
 }
-.mainpro__hijo{
+/* estilos de las utilidades del index */
+.carrito__img {
+    width: 8rem;
+    height: 8rem;
+}
+
+.utilidades {
+    display: grid;
+    grid-template-areas:
+        "buscador categorias carrito";
+    grid-template-columns: 20rem 1fr 1fr;
+    width: 100%;
+}
+
+.carrito {
+    width: 8rem;
+    height: 8rem;
+    grid-area: carrito;
+}
+
+.categorias {
+    grid-area: categorias;
+}
+
+.buscador {
+    margin: 1rem;
+    grid-area: buscador;
+}
+/* estilos de las estiquetas de productos */
+.mainpro__hijo {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 1rem;
+    border: 0.3rem solid rgb(32, 97, 138);
+    border-radius: 0.5rem;
+    padding: 2rem;
 }
+
+#mainpro {
+    display: flex;
+    justify-content: left;
+}
+
+.mainpro__hijo__img {
+    width: 8rem;
+    height: 8rem;
+}
+
 /* estilos de las categorias */
-.categorias{
+.categorias {
     list-style: none;
-    display: inline;
 }
-.categorias__mostrar{
-    display: inline-block;
-    margin: 4rem;
-}
-.categorias__mostrar__hijo{
+.categorias__mostrar__hijo {
     display: none;
     list-style: none;
     padding-left: 0rem;
     padding: 1rem;
     position: absolute;
     background-color: aqua;
-    border: 1px solid black ;
+    border: 1px solid black;
     border-radius: 3px;
 }
-.categorias__mostrar:hover > ul{
+
+.categorias__mostrar:hover>ul {
     display: block;
 }
+
 /* estilos carrito */
-.finalizarSi{
+.finalizarSi {
     display: inline;
 }
-.noMostrar{
+
+.noMostrar {
     display: none;
 }
-.cruz{
+
+.cruz {
     width: 2rem;
     height: 2rem;
 }

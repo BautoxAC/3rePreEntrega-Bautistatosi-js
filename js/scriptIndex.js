@@ -37,7 +37,6 @@ function reinicio() {
 }
 function volver() {
     renderizarProductos(productos)
-    console.log(carrito)
 }
 let contenedorProductos = document.getElementById("mainpro")
 if (localStorage.getItem("carrito")) {
@@ -59,7 +58,7 @@ function renderizarProductos(arrayDeProductos) {
             const producto = arrayDeProductos[i];
             contenedorProductos.innerHTML += `
         <div class="mainpro__hijo" id="producto__id:${producto.id}">
-            <img src="${producto.imgUrl}" alt="medias de color azul" style="height:200px;width:200px">
+            <img src="${producto.imgUrl}" alt="medias de color azul" class="mainpro__hijo__img">
             <h2>${producto.nombre}</h2>
             <p>${producto.precio}$</p>
             <button type="button" class="btn btn-primary" id="producto__N:${i}__boton">Ver producto</button>
@@ -85,14 +84,13 @@ function renderizarProductos(arrayDeProductos) {
             let compra = producto
             contenedorProductos.innerHTML =
                 `<div class="comprarProductoHijo" id="producto${compra.id}">
-                <img src="${compra.imgUrl}" alt="medias de color azul" style="height:200px;width:200px">
+                <img src="${compra.imgUrl}" alt="medias de color azul" class="comprarProductoHijo__img">
                 <h2>${compra.nombre}</h2>
                 <p>${compra.precio}$</p>
                 <p id="disponibleTexto">disponibles: ${compra.disponible}</p>
                 <button type="button" class="btn btn-primary" id="resta">-</button>
                 <input type="number" value="0" id="stock" min="0" max="${compra.disponible}">
                 <button type="button" class="btn btn-primary" id="suma">+</button>
-                <br>
                 <button type="submit" class="btn btn-primary" id="carrito">Añadir al carrito</button>
                 </div>`
             let botonCarrito = document.getElementById("carrito")
