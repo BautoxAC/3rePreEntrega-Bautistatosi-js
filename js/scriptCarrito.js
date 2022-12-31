@@ -6,13 +6,16 @@ let faltapagar = true
 let elementoTotal = document.getElementById("total")
 let precioTotal = 0
 let botonFinalizar = document.getElementById("finalizar")
+//revisa si hay productos en el carrito
 if (localStorage.getItem("carrito")) {
     botonFinalizar.id = "finalizarSi"
+    //renderiza el carrito
     function renderizarCarrito() {
         carrito = JSON.parse(localStorage.getItem("carrito"))
         contenedorCarrito.innerHTML = ""
         elementoTotal.innerText = ""
         total = []
+        //titulos de las categorias
         contenedorCarrito.innerHTML = `
         <div id="titulo">
             <h2 class="tituloElementoCarrito__img">Img.</h2>
@@ -44,6 +47,7 @@ if (localStorage.getItem("carrito")) {
             `
         }
         for (let i = 0; i < carrito.length; i++) {
+            //funcion si ocurre un cambio de prcio los valores del subtotal y el total cambien
             function cambioDePrecio() {
                 precio.innerText = cant.value * producto.precio + "$"
                 total[i] = parseInt(precio.innerText)
@@ -51,7 +55,9 @@ if (localStorage.getItem("carrito")) {
                 precioTotal = parseInt(elementoTotal.innerText)
             }
             const producto = carrito[i]
+            //el input de la cantidad a comprar
             let cant = document.getElementById("cantidadN" + producto.id)
+            //valor del subtotal
             let precio = document.getElementById("precioN" + producto.id)
             document.getElementById("sumaN" + producto.id).addEventListener("click", suma1)
             document.getElementById("restaN" + producto.id).addEventListener("click", resta1)
@@ -70,6 +76,7 @@ if (localStorage.getItem("carrito")) {
             precio.innerText = cant.value * producto.precio + "$"
             total.push(precio.innerText)
             cant.addEventListener("change", cambioPrecio)
+            //revisa que el valor ingresado por el usuario sea correcto
             function cambioPrecio() {
                 if (cant.value <= producto.stock && cant.value > 0) {
                     cambioDePrecio()
@@ -79,13 +86,16 @@ if (localStorage.getItem("carrito")) {
                     cambioDePrecio()
                 }
             }
+            //agarra la cruz roja que esta al lado de cada elemento ye elimina el prodructo del carrito
             document.getElementById("cruzN" + producto.id).addEventListener("click", eliminarProducto)
             function eliminarProducto() {
                 let elementoEliminado = productos.find(producto1 => producto1.id === producto.id)
                 elementoEliminado.disponible = elementoEliminado.stock
+                //cambia los valores del producto eliminado del carrito volviendolo a como era antes de ser agregado al carrito
                 localStorage.setItem("productos", JSON.stringify(productos))
                 carrito.splice(carrito.indexOf(elementoEliminado), 1)
                 localStorage.setItem("carrito", JSON.stringify(carrito))
+                //si no hay nada en el carrito aparece que no hay productos
                 if (carrito.length === 0) {
                     contenedorCarrito.innerHTML = `<h2>No hay productos en el carrito</h2>`
                     botonFinalizar.id = "noMostrar"
@@ -96,6 +106,7 @@ if (localStorage.getItem("carrito")) {
                 }
             }
         }
+        //variable del prcio total que es la suma de todos los subtotales
         precioTotal = total.reduce((acumulador, producto) => acumulador + parseInt(producto), 0)
         elementoTotal.innerText = "Total: " + precioTotal + "$"
         botonFinalizar.addEventListener("click", finalizarCompra)
@@ -124,11 +135,12 @@ if (localStorage.getItem("carrito")) {
                     faltapagar = true
                 }
             } while (faltapagar === true)
+            //al terminar la compra a los productos comprados se le resta la cantidad de productos comprados al stock de estos y recarga la pagina para que aparezca que no hay productos en el carrito
             for (let i = 0; i < carrito.length; i++) {
                 let comprado = productos.find(producto => producto.id === carrito[i].id)
                 let cant = document.getElementById("cantidadN" + carrito[i].id)
                 comprado.stock -= cant.value
-            }
+            } 
             localStorage.setItem("productos", JSON.stringify(productos))
             localStorage.removeItem("carrito")
             location.reload()

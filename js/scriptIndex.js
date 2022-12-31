@@ -1,5 +1,4 @@
 //Array
-//ordenar por categoriay alfabeticamente dentro de esa categoria
 let productos = [
     { nombre: "JeansB", id: 0, categoria: "pantalones", stock: 4, precio: 20, imgUrl: "./img/productos/JeansB.png" },
     { nombre: "MediasC", id: 1, categoria: "medias", stock: 10, precio: 30, imgUrl: "./img/productos/MediasC.png" },
@@ -13,11 +12,17 @@ let productos = [
     { nombre: "LightB", id: 9, categoria: "vestidos", stock: 6, precio: 50, imgUrl: "./img/productos/LightB.png" },
     { nombre: "LightE2", id: 10, categoria: "remeras", stock: 7, precio: 20, imgUrl: "./img/productos/LightE2.png" }
 ]
-let reini = document.getElementById("reinicio")
-reini.addEventListener("click", reinicio)
 let carrito = []
+//el contenedos utilidades es el que anida el buscador, el ver categorias y el boton del carrito
 let utiliadesIndex = document.getElementById("utilidades")
 let tituloIndex = document.getElementById("h1")
+let contenedorProductos = document.getElementById("mainpro")
+let proFiltradoCate = []
+let clickeados = 0
+let buscador = document.getElementById("search")
+//un boton para restablecer la pagina a los valores iniciales
+let reini = document.getElementById("reinicio")
+reini.addEventListener("click", reinicio)
 function reinicio() {
     productos = [
         { nombre: "JeansB", id: 0, categoria: "pantalones", stock: 4, precio: 20, imgUrl: "./img/productos/JeansB.png" },
@@ -37,7 +42,6 @@ function reinicio() {
     renderizarProductos(productos)
     location.reload()
 }
-let contenedorProductos = document.getElementById("mainpro")
 if (localStorage.getItem("carrito")) {
     carrito = JSON.parse(localStorage.getItem("carrito"))
 }
@@ -46,6 +50,7 @@ if (localStorage.getItem("productos")) {
 } else {
     localStorage.setItem("productos", JSON.stringify(productos))
 }
+
 renderizarProductos(productos)
 
 //renderizar el html del array seleccionado
@@ -69,6 +74,7 @@ function renderizarProductos(arrayDeProductos) {
     //le pone el evento click a los botones de agregar carrito
     for (let i = 0; i < arrayDeProductos.length; i++) {
         const producto = productos[i]
+        //determina la variable del objeto producto para ver cuantos de ese tipo hay disponibles y si no hay disponibles no deja agregar mas ya que estan todos en el carrito
         if (typeof (producto.disponible) === "undefined") {
             producto.disponible = producto.stock
         }
@@ -80,10 +86,13 @@ function renderizarProductos(arrayDeProductos) {
         }
         //script para visualizar productos a comprar
         function verProducto() {
+            //al ver el producto seleccionado las utilidades el titulo y el boton reinicio no se muestran
             utiliadesIndex.id = "noMostrar"
             tituloIndex.id = "noMostrar"
             reini.id="noMostrar"
+            //determina producto en compra
             let compra = producto
+            //muestra el producto seleccionado
             contenedorProductos.innerHTML =
                 `<div class="comprarProductoHijo" id="producto${compra.id}">
                 <img src="${compra.imgUrl}" alt="medias de color azul" class="comprarProductoHijo__img">
@@ -105,6 +114,7 @@ function renderizarProductos(arrayDeProductos) {
                 tituloIndex.id = "h1"
                 reini.id="reinicio"
             }
+            //boton carrito
             let botonCarrito = document.getElementById("carrito")
             let disponibleTexto = document.getElementById("disponibleTexto")
             botonCarrito.addEventListener("click", agregarAlCarrito)
@@ -126,7 +136,9 @@ function renderizarProductos(arrayDeProductos) {
                     alert("No puedes agregar más items de este producto\nEstan todos los disponibles en el carrito")
                 } else {
                     if (compra.disponible >= stock.value && stock.value >= 1) {
+                        //se hace la resta de la cantidad que el usuario puso y los disponibles
                         compra.disponible -= stock.value
+                        //revisa si hay un producto repetido en el carrito para ver si agregar uno nuevo o cambiar los valores
                         if (carrito.find(producto => producto.id === compra.id)) {
                             let repetido = carrito[carrito.indexOf(carrito.find(producto => producto.id === compra.id))]
                             repetido.disponible = compra.disponible
@@ -136,9 +148,10 @@ function renderizarProductos(arrayDeProductos) {
                         }
                         localStorage.setItem("carrito", JSON.stringify(carrito))
                         alert("Compra añadida exitosamente al carrito")
+                        //revisa si hay disponibles en la compra para que el usuario no compre mas del producto
                         if (compra.disponible === 0) {
                             compra.sinStock = true
-                            alert("SIN STOCK DISPONIBLE DEL PRODUCTO")
+                            alert("SIN STOCK DISPONIBLE DEL PRODUCTO\nEstan todos los disponibles en el carrito")
                             utiliadesIndex.id = "utilidades"
                             tituloIndex.id = "h1"
                             reini.id="reinicio"
@@ -157,17 +170,17 @@ function renderizarProductos(arrayDeProductos) {
     }
 }
 //Buscador por categoria y nombre del producto
-let buscador = document.getElementById("search")
 buscador.addEventListener("change", renderizarProductosBuscados)
 function renderizarProductosBuscados() {
+    //revisa si hay alguno de los producto esta afectado por el ver categorias ya que se determina un nueva variable llamada agregar
     if (productos.find(producto => producto.agregar === true)) {
+        //el buscador busca por categoria y nombre
         renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar === true))
     } else {
         renderizarProductos(productos.filter(producto => producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())))
     }
 }
-let proFiltradoCate = []
-let clickeados = 0
+
 //filtrador por categorias
 for (let i = 1; i < 6; i++) {
     //agarra la checkbox
@@ -191,9 +204,12 @@ for (let i = 1; i < 6; i++) {
                 renderizarFiltrados(false)
             }
         }
+        //funcion para filtrar por la categoria seleccionada por el usuario
         function renderizarFiltrados(agregarSiNo) {
+            //filtra por el texto que hay en la lista categorias en el html
             proFiltradoCate = productos.filter(producto => producto.categoria === cate.innerText.toLowerCase())
             for (const filtrado of proFiltradoCate) {
+                //si el checkbox esta clickeado determina que se agreguen y si no que no se agreguen
                 filtrado.agregar = agregarSiNo
             }
             renderizarProductos(productos.filter(producto => (producto.nombre.toLowerCase().includes(buscador.value.toLowerCase()) || producto.categoria.includes(buscador.value.toLowerCase())) && producto.agregar === true))
