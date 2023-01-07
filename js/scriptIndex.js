@@ -1,3 +1,5 @@
+const DateTime=luxon.DateTime
+console.log(DateTime.local().year)
 //Array
 let productos = [
     { nombre: "JeansB", id: 0, categoria: "pantalones", stock: 4, precio: 20, imgUrl: "./img/productos/JeansB.png" },
@@ -86,10 +88,18 @@ function renderizarProductos(arrayDeProductos) {
         }
         //script para visualizar productos a comprar
         function verProducto() {
+            Toastify({
+                text: "Prueba de tostada",
+                duration: 3000,
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                },
+            }).showToast();
             //al ver el producto seleccionado las utilidades el titulo y el boton reinicio no se muestran
             utiliadesIndex.id = "noMostrar"
             tituloIndex.id = "noMostrar"
-            reini.id="noMostrar"
+            reini.id = "noMostrar"
             //determina producto en compra
             let compra = producto
             //muestra el producto seleccionado
@@ -112,7 +122,7 @@ function renderizarProductos(arrayDeProductos) {
                 renderizarProductos(productos)
                 utiliadesIndex.id = "utilidades"
                 tituloIndex.id = "h1"
-                reini.id="reinicio"
+                reini.id = "reinicio"
             }
             //boton carrito
             let botonCarrito = document.getElementById("carrito")
@@ -147,14 +157,17 @@ function renderizarProductos(arrayDeProductos) {
                             carrito.push({ ...compra, comprar: Number(stock.value) })
                         }
                         localStorage.setItem("carrito", JSON.stringify(carrito))
-                        alert("Compra añadida exitosamente al carrito")
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Se agrego tu compra al carrito',
+                        })
                         //revisa si hay disponibles en la compra para que el usuario no compre mas del producto
                         if (compra.disponible === 0) {
                             compra.sinStock = true
                             alert("SIN STOCK DISPONIBLE DEL PRODUCTO\nEstan todos los disponibles en el carrito")
                             utiliadesIndex.id = "utilidades"
                             tituloIndex.id = "h1"
-                            reini.id="reinicio"
+                            reini.id = "reinicio"
                             renderizarProductos(productos)
                         }
                         disponibleTexto.innerText = "disponibles: " + compra.disponible

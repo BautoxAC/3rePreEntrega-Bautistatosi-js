@@ -1,0 +1,101 @@
+[33mcommit 29b84d71d1182154cf5f96b5f39dd1d477d56b35[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Sat Dec 31 20:09:10 2022 -0300
+
+    comentarios al codigo para su mayor comprension
+
+[33mcommit 06a0e395a2d36b2c1a84671d2cd3723d9f069ec2[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Fri Dec 30 00:22:56 2022 -0300
+
+    cambio en como se disponen los productos
+
+[33mcommit 449983b7b81aadf00b22549464009dbac3141480[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Fri Dec 30 00:02:39 2022 -0300
+
+    estilos finalizados
+
+[33mcommit db89c4a6a17daee33c109054e79412b0d4ef977e[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Thu Dec 29 21:20:13 2022 -0300
+
+    inicio de los estilos del index
+
+[33mcommit 5d6dbfab39be72b2e97fb64c6353cddec412e861[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Thu Dec 29 20:22:24 2022 -0300
+
+    carrito hecho con boton para eliminar producto
+
+[33mcommit 997dff30ece3fae885a2b17ed3c12182b6465238[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Wed Dec 28 12:31:22 2022 -0300
+
+    creado de array del total del carrito y que cambie cada vez que alguno de los input haga el evento change
+
+[33mcommit 4be3ad596d936f58f9408374a317e7f427cf5984[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Wed Dec 28 07:47:53 2022 -0300
+
+    boton volver al ver el producto y renderizado correcto del html del carrito junto con sus subtotales(falta hacer total)
+
+[33mcommit ac505c059cd136c01874538758f0b8f2e9ecc247[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Tue Dec 27 21:43:33 2022 -0300
+
+    renderizado de carrito y el boton de agregar al carrito funciona
+
+[33mcommit c96fb95259306d1b66c27c081fdbef17d5fa28e7[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Tue Dec 27 17:40:27 2022 -0300
+
+    renderizado de carrito y el boton de agregar al carrito funciona
+
+[33mcommit eece1c3f8ba6c2d3d66afd456bb8f096062eb817[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Mon Dec 26 20:31:46 2022 -0300
+
+    boton de reinicio y cambios en el renderizado de productos para que el boton de agregar al carrito siempre funciones
+
+[33mcommit 4e178daeb536cfd85438e769eee9cd534bd0adf8[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Mon Dec 26 19:56:51 2022 -0300
+
+    agregado de carrtio al producto seleccionado y guardo en el localstorage
+
+[33mcommit 40643e6304e123bf5b33cadbf2d001031f298678[m[33m ([m[1;32mcarrito[m[33m)[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Sun Dec 25 20:14:10 2022 -0300
+
+    empezado del carrito
+
+[33mcommit 1c787dc9aa39dcc6e788fa09343a07b50ce8bb87[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Sun Dec 25 19:59:02 2022 -0300
+
+    arreglo de bugs
+
+[33mcommit 5b8044ce59a00a89715da0aa76207694c92f7c44[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Sun Dec 25 19:20:53 2022 -0300
+
+    agregado de checkboxes para que el usuario elija las categorias a buscar
+
+[33mcommit e391d39539e513c4594e7079dd1ab362279d0d48[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Thu Dec 22 19:25:43 2022 -0300
+
+    mostrar producto selecionado para comprar y filtrar por categoria
+
+[33mcommit 1c551f69f6b8bb539aa120021a5dfe54dd8ba018[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Thu Dec 22 13:48:05 2022 -0300
+
+    mostrar producto seleccionado para agregar al carrito
+
+[33mcommit b7cead65038b169dbeceda2347c4b6ded963b8f0[m
+Author: Bautista Tosi <tosibautista@gmail.com>
+Date:   Mon Dec 19 23:57:00 2022 -0300
+
+    buscador hecho
